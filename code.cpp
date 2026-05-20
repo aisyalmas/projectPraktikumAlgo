@@ -23,6 +23,53 @@ int jumlahUser=0,menuAwal,userMax=100;
 int userAktif=-1;
 string usernameNew,passwordNew,logPass,logUser;
 
+void halUtama(){
+    int pilHalUtama;
+
+    do{
+        cout << "\n+==================================================+\n";
+        cout << "  |   [FIRE]  F.I.R.E. DASHBOARD                     |\n";
+        cout << "  |   Financial Independence, Retire Early           |\n";
+        cout << "  +==================================================+\n";
+        cout << "  |  Halo, " << u.username << "!\t\t\t\t\t     |\n"; // \t tu kaya tab buat ngasih jarak
+        //cout << "  |  Saldo: " << u.Profile.currentSavings << "\t\t\t\t     |\n"; 
+        
+        cout << "  +==================================================+\n";
+        cout << "  |  [1] Kelola Profil & Target Pensiun              |\n";
+        cout << "  |  [2] Setor Celengan                              |\n";
+        cout << "  |  [3] Riwayat & Analisis Tabungan                 |\n";
+        cout << "  |  [4] Ramalan Pensiun (Rekursi)                   |\n";
+        cout << "  |  [0] Simpan, Logout & Keluar                     |\n";
+        cout << "  +==================================================+\n";
+        cout << "\n  Pilih Menu (0-4): "; cin >> pilHalUtama;
+
+        cin.ignore();
+
+        /*
+        switch(pilHalUtama){
+            case 1:
+                //menu profile & target pensiun
+                break;
+            case 2:
+                //menu setor celengan
+                break;
+            case 3:
+                //menu riwayat & analisis tabungan
+                break;
+            case 4:
+                //menu ramalan pensiun
+                break;
+            case 0:
+                simpanKeFile();
+                cout << "\nTerima kasih telah menggunakan aplikasi kami. Sampai jumpa!\n";
+                isexit = true;
+                break;
+            default:
+                cout << "\nPilihan tidak valid. Silakan pilih antara 0-4.\n";
+        } */
+    }
+}
+
 void menuProfile(){
     users u[userAktif];
 
