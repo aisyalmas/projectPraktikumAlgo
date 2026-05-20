@@ -35,15 +35,27 @@ void menuProfile(){
     cout<<"\n Umur Sekarang : ";cin>>u[userAktif].Profile.currentAge;
     cout<<"\n Target Pensiun Dini : ";cin>>u[userAktif].Profile.targetAge;
     cout<<"\n Asumsi Tingkat Inflasi(%) : ";cin>>u[userAktif].Profile.inflationRate;
+    cout<<"\n Pengeluaran anda (/month) : ";cin>>u[userAktif].Profile.monthlyExpense;
+
+    u[userAktif].Profile.isDone = true;             //udah ngisi profile
 
     // buat proses penghitungan aturan 4%+inflasi
     //1. hitung pengeluaran pertahun function
+
     //2. proyeksi infalsi masa depan function
     //3. target asetnya minimal menggunakan the 4%rule kaliin 25 function 
     //tampilin hasil hitungan
 
 }
 
+string formatMoney(double money){
+    
+
+}
+
+long double yearlyExpenses(){
+    
+}
 
 int main(){
     users user[userMax];
