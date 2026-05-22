@@ -3,6 +3,13 @@ using namespace std;
 
 int isexit = false;
 
+struct Transaction{
+    int bulan;
+    int tahun;
+    long double nominal;
+    string catatan;
+};
+
 struct userProfile{
     int currentAge;
     int targetAge;
@@ -17,8 +24,14 @@ struct users{
     string password;
     userProfile Profile;
 
+    long double totalSavings; //nyimpen total saldo
+    Transaction history[100]; //nyimpen riwayat catatan
+    int jumlahTransaksi = 0;
+
 };
 
+users user[100];
+long double targetAset = 0;
 int jumlahUser=0,menuAwal,userMax=100;
 int userAktif=-1;
 string usernameNew,passwordNew,logPass,logUser;
@@ -31,7 +44,7 @@ void halUtama(){
         cout << "  |   [FIRE]  F.I.R.E. DASHBOARD                     |\n";
         cout << "  |   Financial Independence, Retire Early           |\n";
         cout << "  +==================================================+\n";
-        cout << "  |  Halo, " << u.username << "!\t\t\t\t\t     |\n"; // \t tu kaya tab buat ngasih jarak
+        cout << "  |  Halo, " << user[userAktif].username << "!\t\t\t\t\t     |\n"; // \t tu kaya tab buat ngasih jarak
         //cout << "  |  Saldo: " << u.Profile.currentSavings << "\t\t\t\t     |\n"; 
         
         cout << "  +==================================================+\n";
@@ -67,7 +80,7 @@ void halUtama(){
             default:
                 cout << "\nPilihan tidak valid. Silakan pilih antara 0-4.\n";
         } */
-    }
+    }while(pilHalUtama != 0 && isexit == false);
 }
 
 void menuProfile(){
@@ -93,6 +106,69 @@ void menuProfile(){
     //3. target asetnya minimal menggunakan the 4%rule kaliin 25 function 
     //tampilin hasil hitungan
 
+}
+
+void menuSetor(){
+    int bln, thn;
+    long double nominal;
+    string catatan;
+
+    cout << "\n+==================================================+\n";
+    cout << " |   [FIRE] F.I.R.E. DASHBOARD                      |\n";
+    cout << " |   Setor Celengan                                 |\n";
+    cout << "+==================================================+\n";
+    cout << "\n Masukkan detail setoran:\n\n";
+
+    while(true){
+        cout << "Bulan (1-12): "; cin >> bln;
+        if(!cin.fail() && bln < 1 && bln > 12){ //cek validasi input bulan yang harus angka dan 1-12
+            break; //input bener, keluar dari loop bulan
+        }
+        cin.clear(); //hapus error kalo input selain angka
+        cin.ignore(1000, '\n'); //buat bersihin sisa input yang salah
+        cout << "[Error] Bulan tidak valid! Masukkan bulan 1-12.\n";
+    } 
+
+    cout << "Tahun: "; cin >> thn;
+
+    while(true){
+        cout << "Nominal (Rp): "; cin >> nominal;
+        if(!cin.fail() && nominal >0 ){ //cek validasi input nominal yang harus angka dan lebih besar dari 0
+            break; //input bener, keluar dari loop nominal
+        }
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "[Error] Nominal harus berupa angka dan lebih besar dari 0.\n";
+    }
+    
+    cin.ignore();
+    cout << "Catatan: "; getline(cin, catatan);
+
+    user[userAktif].totalSavings += nominal; //menambah dan update total saldo
+
+    //nyimpan ke array history user yang aktif
+    int idx = user[userAktif].jumlahTransaksi; //buat nampung index transaksi yang sekarang
+    user[userAktif].history[idx].bulan = bln; //masukin data transaksi ke database riwayat
+    user[userAktif].history[idx].tahun = thn;   
+    user[userAktif].history[idx].nominal = nominal;
+    user[userAktif].history[idx].catatan = catatan; 
+    user[userAktif].jumlahTransaksi++; //update jumlah transaksi    
+
+    long double sisaTarget = targetAset - user[userAktif].totalSavings; //hitung sisa target aset   
+    if(sisaTarget < 0){
+        sisaTarget = 0;
+    }
+
+    //tampilkan output berhasil
+    cout << "[OK] Setoran berhasil dicatat!\n";
+    cout << "----------------------------------------------------\n";
+    cout << "Jumlah setor : " << formatMoney(nominal) << "\n";
+    cout << "Total saldo  : " << formatMoney(user[userAktif].totalSavings) << "\n";
+    cout << "Sisa target  : " << formatMoney(sisaTarget) << "\n";
+    cout << "----------------------------------------------------\n";   
+
+    cout << "\nTekan ENTER untuk kembali ke Menu Utama...";
+    cin.get();
 }
 
 string formatMoney(double money){
