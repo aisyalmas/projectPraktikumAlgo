@@ -1,20 +1,25 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <cmath>
 using namespace std;
 
 int isexit = false;
+const int maxHistory =100;
 
 struct Transaction{
     int bulan;
     int tahun;
-    long double nominal;
+    long long nominal;
     string catatan;
 };
 
 struct userProfile{
     int currentAge;
     int targetAge;
-    long double monthlyExpense;
+    long long monthlyExpense;
     double inflationRate;
+    long long targetAmount;
     bool isDone;
     
 };
@@ -23,25 +28,65 @@ struct users{
     string username;
     string password;
     userProfile Profile;
-
-    long double totalSavings; //nyimpen total saldo
-    Transaction history[100]; //nyimpen riwayat catatan
+    
+    long long totalSavings; //nyimpen total saldo
+    Transaction history[maxHistory]; //nyimpen riwayat catatan
     int jumlahTransaksi = 0;
-
+    
 };
 
-users user[100];
+
 long double targetAset = 0;
-int jumlahUser=0,menuAwal,userMax=100;
+int jumlahUser=0,menuAwal;
+const int userMax=100;
+users user[userMax];
 int userAktif=-1;
 string usernameNew,passwordNew,logPass,logUser;
 
+void pauseScreen(){
+    cout<<"\n Tekan Enter jika ingin kembali ..... ";
+    cin.ignore();
+    cin.get();
+}
+
+string formatMoney(long long money){
+    bool isNegative =false;
+    if(money<0){// if uang negative
+        isNegative = true;
+        money =-money;
+    }
+
+    if(money == 0){//if uang=0
+        return "Rp. 0";
+    }
+    //menggunakan logika length
+
+    string angkaStr = to_string(money);
+    string hasil="";
+
+    int panjang = angkaStr.length();
+    int posisiBlkng= 0;
+
+    for(int i=panjang -1;i>=0;i--){
+        hasil=angkaStr[i]+hasil;
+        posisiBlkng++;
+        
+        if(posisiBlkng %3 == 0 && i !=0){
+            hasil= "."+hasil;
+        }
+    }
+    
+    if(isNegative)return "-Rp "+ hasil;
+    return "Rp "+ hasil;
+}
+
 void halUtama(){
+    users u;
     int pilHalUtama;
 
     do{
         cout << "\n+==================================================+\n";
-        cout << "  |   [FIRE]  F.I.R.E. DASHBOARD                     |\n";
+        cout << "  |   [FIRE]  F.I.R.E. MAIN MENU                     |\n";
         cout << "  |   Financial Independence, Retire Early           |\n";
         cout << "  +==================================================+\n";
         cout << "  |  Halo, " << user[userAktif].username << "!\t\t\t\t\t     |\n"; // \t tu kaya tab buat ngasih jarak
@@ -51,7 +96,7 @@ void halUtama(){
         cout << "  |  [1] Kelola Profil & Target Pensiun              |\n";
         cout << "  |  [2] Setor Celengan                              |\n";
         cout << "  |  [3] Riwayat & Analisis Tabungan                 |\n";
-        cout << "  |  [4] Ramalan Pensiun (Rekursi)                   |\n";
+        cout << "  |  [4] Proyeksi F.I.R.E                            |\n";
         cout << "  |  [0] Simpan, Logout & Keluar                     |\n";
         cout << "  +==================================================+\n";
         cout << "\n  Pilih Menu (0-4): "; cin >> pilHalUtama;
@@ -61,7 +106,7 @@ void halUtama(){
         /*
         switch(pilHalUtama){
             case 1:
-                //menu profile & target pensiun
+                menuProfile();
                 break;
             case 2:
                 //menu setor celengan
@@ -70,7 +115,7 @@ void halUtama(){
                 //menu riwayat & analisis tabungan
                 break;
             case 4:
-                //menu ramalan pensiun
+                proyeksiKeuangan();
                 break;
             case 0:
                 simpanKeFile();
@@ -80,38 +125,70 @@ void halUtama(){
             default:
                 cout << "\nPilihan tidak valid. Silakan pilih antara 0-4.\n";
         } */
-    }while(pilHalUtama != 0 && isexit == false);
-}
+    }
+}while();
 
 void menuProfile(){
-    users u[userAktif];
-
+    users& u=user[userAktif];
+    char pilih;
     //buat pengkondisian kallau pernah ngisi profile belum kalao belum ngisi kaalu udah tampilin yang lama
-    if(u[userAktif].Profile.isDone){
+    if(u.Profile.isDone){
+        cout<<"\n Data Proflie Anda: ";
+        cout<<"------------------------------------------------------";
+        cout<<"\n Username            : "<<u.username;
+        cout<<"\n Umur Sekarang       : "<<u.Profile.currentAge;
+        cout<<"\n Target Usia Pensiun : "<<u.Profile.targetAge;
+        cout<<"\n Pengeluaran Bulanan : "<<formatMoney(u.Profile.monthlyExpense)<<"/month";
+        cout<<"\n Asumsi Inflasi      : "<<u.Profile.inflationRate<<"%";
+        cout<<"------------------------------------------------------";
+        cout<<"\n Target Aset         : "<<formatMoney(u.Profile.targetAmount);
+        cout<<"\n Saldo Tabungan      : "<<formatMoney(u.totalSavings);
+        cout<<"------------------------------------------------------";
 
+        cout<<"\n Update Profile anda?(y/n):";cin>>pilih;
+        if(pilih != 'y'|| pilih !='Y')return;
     }
     //ngisi profile kalau belum
     cout<<"\n Masukan data Profile Anda: \n";
-    cout<<"\n Umur Sekarang : ";cin>>u[userAktif].Profile.currentAge;
-    cout<<"\n Target Pensiun Dini : ";cin>>u[userAktif].Profile.targetAge;
-    cout<<"\n Asumsi Tingkat Inflasi(%) : ";cin>>u[userAktif].Profile.inflationRate;
-    cout<<"\n Pengeluaran anda (/month) : ";cin>>u[userAktif].Profile.monthlyExpense;
+    cout<<"------------------------------------------------------";
+    cout<<"\n Umur Sekarang : ";cin>>u.Profile.currentAge;
+    cout<<"\n Target Umur Pensiun Dini : ";cin>>u.Profile.targetAge;
+    cout<<"\n Asumsi Tingkat Inflasi(%) : ";cin>>u.Profile.inflationRate;
+    cout<<"\n Pengeluaran anda (/month) : ";cin>>u.Profile.monthlyExpense;
 
-    u[userAktif].Profile.isDone = true;             //udah ngisi profile
-
+    int jarakTahun = u.Profile.targetAge -u.Profile.currentAge;
+    //udah ngisi profile
+    
     // buat proses penghitungan aturan 4%+inflasi
-    //1. hitung pengeluaran pertahun function
-
-    //2. proyeksi infalsi masa depan function
+    //1. hitung pengeluaran pertahun 
+    long long yearlyExpenses = u.Profile.monthlyExpense * 12;
+    //2. proyeksi infalsi masa depan function FV= PV* (1+inflation rate)^n n=jumlah tahun targetnya
+    long long futureValue = yearlyExpenses*pow((1+(u.Profile.inflationRate/100)),jarakTahun);
     //3. target asetnya minimal menggunakan the 4%rule kaliin 25 function 
+    u.Profile.targetAmount = futureValue * 25;
+    
+    
     //tampilin hasil hitungan
 
+    // save data ya
+    saveAll();
+
+    u.Profile.isDone = true;     
+    cout<<"\n --------------------------------------------------------------------------";
+    cout<<"\n Pengeluaran Masa Depan : ";formatMoney(futureValue); cout<<"/ tahun";
+    cout<<"\n Target Kekayaan : ";formatMoney(u.Profile.targetAmount); 
+    cout<<"\n Sisa Waktu Pencapaian : "<< jarakTahun<<" tahun"; 
+    cout<<"\n --------------------------------------------------------------------------";
+    
+    pauseScreen();
 }
+
 
 void menuSetor(){
     int bln, thn;
     long double nominal;
     string catatan;
+    users& u = user[userAktif];
 
     cout << "\n+==================================================+\n";
     cout << " |   [FIRE] F.I.R.E. DASHBOARD                      |\n";
@@ -144,45 +221,125 @@ void menuSetor(){
     cin.ignore();
     cout << "Catatan: "; getline(cin, catatan);
 
-    user[userAktif].totalSavings += nominal; //menambah dan update total saldo
+    u.totalSavings += nominal; //menambah dan update total saldo
 
     //nyimpan ke array history user yang aktif
-    int idx = user[userAktif].jumlahTransaksi; //buat nampung index transaksi yang sekarang
-    user[userAktif].history[idx].bulan = bln; //masukin data transaksi ke database riwayat
-    user[userAktif].history[idx].tahun = thn;   
-    user[userAktif].history[idx].nominal = nominal;
-    user[userAktif].history[idx].catatan = catatan; 
-    user[userAktif].jumlahTransaksi++; //update jumlah transaksi    
+    int idx = u.jumlahTransaksi; //buat nampung index transaksi yang sekarang
+    u.history[idx].bulan = bln; //masukin data transaksi ke database riwayat
+    u.history[idx].tahun = thn;   
+    u.history[idx].nominal = nominal;
+    u.history[idx].catatan = catatan; 
+    u.jumlahTransaksi++; //update jumlah transaksi    
 
-    long double sisaTarget = targetAset - user[userAktif].totalSavings; //hitung sisa target aset   
+    long double sisaTarget = targetAset - u.totalSavings; //hitung sisa target aset   
     if(sisaTarget < 0){
         sisaTarget = 0;
+        cout<<"\n CONGRATSS!!!! TARGET F.I.R.E ANDA TERCAPAIIIII";
     }
 
     //tampilkan output berhasil
     cout << "[OK] Setoran berhasil dicatat!\n";
     cout << "----------------------------------------------------\n";
-    cout << "Jumlah setor : " << formatMoney(nominal) << "\n";
-    cout << "Total saldo  : " << formatMoney(user[userAktif].totalSavings) << "\n";
-    cout << "Sisa target  : " << formatMoney(sisaTarget) << "\n";
+    cout << "Jumlah setor : "<<formatMoney(nominal)<< "\n";
+    cout << "Total saldo  : "<<formatMoney(u.totalSavings)<< "\n";
+    cout << "Sisa target  : "<<formatMoney(sisaTarget)<< "\n";
     cout << "----------------------------------------------------\n";   
-
-    cout << "\nTekan ENTER untuk kembali ke Menu Utama...";
-    cin.get();
+    pauseScreen();
 }
 
-string formatMoney(double money){
-    
+void riwayat_analisis(){}
+
+
+void proyeksiKeuangan(){
+    long long pilih=0;
+    users& u= user[userAktif];
+    long long avg=u.totalSavings/u.jumlahTransaksi;
+
+    if(!u.Profile.isDone){
+        cout<<"\n Lengkapi profile terlebih dahulu, bisa di sis di menu [1].";
+        return;
+    }
+
+    cout<<"\n --------------------------------------------------";
+    if(avg>0){
+        cout<<"\n Tabungan Rutin /month (Rp) [ rata-rata: "<<formatMoney(avg)<<"]";     
+        cout<<"\n --------------------------------------------------";
+        cout<<"\n [!] apabila ingin menggunakan rata-rata diatas (0)";
+    }
+    cout<<"\n Berapa target tabungan rutin perbulan?";
+    cout<<"\n [!] atau ingin memasukan target tabungan sendiri /month";
+    cout<<"\n pilihan anda (Rp ) :";cin>>pilih;
+
+
 
 }
 
-long double yearlyExpenses(){
-    
+void loadData(){
+    ifstream file("database_users.txt",ios::in);
+
+    if(!file.is_open()){
+        cout<<"\n maaf file tidak dapat dibuka, gagal memuat file";
+        return;
+    }
+
+    file>>jumlahUser;
+    file.ignore();
+    for(int i=0;i<jumlahUser && i<userMax;i++){
+        getline(file,user[i].username); //tring data type
+        getline(file,user[i].password);
+        file>>user[i].Profile.currentAge
+            >>user[i].Profile.targetAge
+            >>user[i].Profile.monthlyExpense
+            >>user[i].Profile.inflationRate
+            >>user[i].Profile.targetAmount
+            >>user[i].totalSavings
+            >>user[i].Profile.isDone;
+    file>> user[i].jumlahTransaksi;
+    file.ignore();
+        for(int j=0; j<user[i].jumlahTransaksi && j<maxHistory;j++){
+            file>>user[i].history[j].bulan
+                >>user[i].history[j].tahun
+                >>user[i].history[j].nominal;
+                file.ignore();
+            getline(file, user[i].history[j].catatan);
+        }
+    }
+    file.close();
+}
+void saveAll(){
+    ofstream file("database_users.txt",ios::out);
+
+    if(!file.is_open()){
+        cout<<"\n Maaf file tidak dapat dibuka, gagal menyimpan file";
+        return;
+    }
+
+    file<<jumlahUser;
+    for(int i=0;i<jumlahUser;i++){
+        file<<user[i].username<<"\n"<<user[i].password<<"\n";
+
+        file<<user[i].Profile.currentAge<<"\n"
+            <<user[i].Profile.targetAge<<"\n"
+            <<user[i].Profile.monthlyExpense<<"\n"
+            <<user[i].Profile.inflationRate<<"\n"
+            <<user[i].Profile.targetAmount<<"\n"
+            <<user[i].totalSavings<<"\n"
+            <<user[i].Profile.isDone<<"\n";
+
+        file<<user[i].jumlahTransaksi<<"\n";
+        for(int j=0;j<user[i].jumlahTransaksi;j++){
+            file<<user[i].history[j].bulan<<"\n"
+                <<user[i].history[j].tahun<<"\n"
+                <<user[i].history[j].nominal<<"\n"
+                <<user[i].history[j].catatan<<"\n";
+        }
+    }
+    file.close();
 }
 
 int main(){
-    users user[userMax];
-
+    //inisialisasi data
+    loadData();
     do{
         
         //halaman login
@@ -265,6 +422,7 @@ int main(){
             
             cout<<"\n Selamat Anda berhasil LOGIN";
             //function buat menu apps
+            halUtama();
 
             break;
         case 3:
