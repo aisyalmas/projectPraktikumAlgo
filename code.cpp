@@ -376,8 +376,6 @@ void menulaporan(){
         }
     }
 
-
-    
    
     //for decision making
     long long saldoBerjalan = u.totalSavings;
@@ -636,25 +634,33 @@ void halUtama(){
     int pilHalUtama;
 
     do{
-        system("cls");
-        cout << "\n+==================================================+\n";
-        cout << "  |   [FIRE]  F.I.R.E. MAIN MENU                     |\n";
-        cout << "  |   Financial Independence, Retire Early           |\n";
-        cout << "  +==================================================+\n";
-        cout << "  |  Halo, " << user[userAktif].username << "!\t\t\t|\n"; // \t tu kaya tab buat ngasih jarak
-        //cout << "  |  Saldo: " << u.Profile.currentSavings << "\t\t\t\t     |\n"; 
-        
-        cout << "  +==================================================+\n";
-        cout << "  |  [1] Kelola Profil & Target Pensiun              |\n";
-        cout << "  |  [2] Setor Celengan                              |\n";
-        cout << "  |  [3] Proyeksi dan Laporan F.I.R.E                |\n";
-        cout << "  |  [4] Hapus, Cari & Tampilkan Transaksi           |\n";
-        cout << "  |  [0] Simpan, Logout & Keluar                     |\n";
-        cout << "  +==================================================+\n";
-        cout << "\n  Pilih Menu (0-4): "; cin >> pilHalUtama;
+        do{
 
-        cin.ignore();
-
+            system("cls");
+            cout << "\n+==================================================+\n";
+            cout << "  |   [FIRE]  F.I.R.E. MAIN MENU                     |\n";
+            cout << "  |   Financial Independence, Retire Early           |\n";
+            cout << "  +==================================================+\n";
+            cout << "  |  Halo, " << user[userAktif].username << "!\t\t\t|\n"; // \t tu kaya tab buat ngasih jarak
+            //cout << "  |  Saldo: " << u.Profile.currentSavings << "\t\t\t\t     |\n"; 
+            
+            cout << "  +==================================================+\n";
+            cout << "  |  [1] Kelola Profil & Target Pensiun              |\n";
+            cout << "  |  [2] Setor Celengan                              |\n";
+            cout << "  |  [3] Proyeksi dan Laporan F.I.R.E                |\n";
+            cout << "  |  [4] Hapus, Cari & Tampilkan Transaksi           |\n";
+            cout << "  |  [5] Simpan, Logout & Keluar                     |\n";
+            cout << "  +==================================================+\n";
+            cout << "\n  Pilih Menu (1-5): "; cin >> pilHalUtama;
+    
+            if(cin.fail()){
+                        cin.clear();
+                        cin.ignore(1000,'\n');
+                        cout<<" kesalahan dalam input!";
+                        pauseScreen();
+                        pilHalUtama=0;
+            }
+        }while(pilHalUtama<1 || pilHalUtama>5);
         
         switch(pilHalUtama){
             case 1:
@@ -669,7 +675,7 @@ void halUtama(){
             case 4:
                 menuTransaksi();
                 break;
-            case 0:
+            case 5:
                 saveAll();
                 cout << "\nTerima kasih telah menggunakan aplikasi kami. Sampai jumpa!\n";
                 pauseScreen();
