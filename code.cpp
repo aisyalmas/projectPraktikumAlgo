@@ -47,7 +47,7 @@ int userAktif=-1;
 string usernameNew,passwordNew,logPass,logUser;
 
 void pauseScreen(){
-    cout<<"\n Tekan Enter jika ingin kembali ..... ";
+    cout<<"\n Tekan Enter jika ingin melanjutkan ..... ";
     cin.ignore();
     cin.get();
 }
@@ -133,16 +133,58 @@ void menuProfile(){
         cout<<"\n------------------------------------------------------";
         
         pauseScreen();
-        cout<<"\n Update Profile anda?(y/n):";cin>>pilih;
+        cout<<"\n Update Profile anda?(y/n):";cin>>pilih;    
+          
         if(pilih != 'y' && pilih !='Y')return;
     }
+
     //ngisi profile kalau belum
+
     cout<<"\n Masukan data Profile Anda: \n";
     cout<<"\n------------------------------------------------------";
-    cout<<"\n Umur Sekarang : ";cin>>u.Profile.currentAge;
-    cout<<"\n Target Umur Pensiun Dini : ";cin>>u.Profile.targetAge;
-    cout<<"\n Asumsi Tingkat Inflasi(%) : ";cin>>u.Profile.inflationRate;
-    cout<<"\n Pengeluaran anda (/month) : ";cin>>u.Profile.monthlyExpense;
+    while(true){
+        cout<<"\n Umur Sekarang : ";cin>>u.Profile.currentAge;
+        if(cin.fail()|| u.Profile.currentAge<=0){
+            cout << " [!] Error: Umur tidak boleh negatif, nol, atau berupa huruf! Coba lagi.\n";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
+    while(true){
+        
+        cout<<"\n Target Umur Pensiun Dini : ";cin>>u.Profile.targetAge;
+        if(cin.fail()|| u.Profile.targetAge<=0){
+            cout << " [!] Error: Umur tidak boleh negatif, nol, atau berupa huruf! Coba lagi.\n";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
+    while(true){
+        
+        cout<<"\n Asumsi Tingkat Inflasi(%) : ";cin>>u.Profile.inflationRate;
+        if(cin.fail()){
+            cout << " [!] Error: INflasi tidak boleh berupa huruf! Coba lagi.\n";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
+    while(true){     
+        cout<<"\n Pengeluaran anda (/month) : ";cin>>u.Profile.monthlyExpense;
+        if(cin.fail()|| u.Profile.monthlyExpense <=0){
+            cout << " [!] Error: Tidak boleh 0 ataupun berupa huruf Coba lagi.\n";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
+
     
     int jarakTahun = u.Profile.targetAge -u.Profile.currentAge;
     //udah ngisi profile
@@ -291,7 +333,20 @@ void menulaporan(){
     }
     cout<<"\n [!] atau ingin memasukan target tabungan sendiri /month\n";
     cout<<"\n Berapa target tabungan rutin perbulan?";
-    cout<<"\n pilihan anda (Rp ) :";cin>>monthlySav;
+
+     while(true){
+        cout<<"\n pilihan anda (Rp ) :";cin>>monthlySav;
+            
+            if(cin.fail()){
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "\n [Error] Masukkan pilihan harus berupa angka!";
+                cout<<"\n tekan enter...";
+                cin.get();
+            }else{
+                break;
+            }
+        }
     
     if(monthlySav<=0 && avgMonthly>0){
         monthlySav =avgMonthly;
@@ -300,7 +355,18 @@ void menulaporan(){
     }
     
     double roi;
-    cout<<"\n Asumsi Return of investment (ROI) yang diletakan pada instrument investasi /tahun(%): ";cin>>roi;
+    
+    while(true){
+        cout<<"\n Asumsi Return of investment (ROI) yang diletakan pada instrument investasi /tahun(%): ";cin>>roi;
+        
+        if(cin.fail()){
+            cout << " [!] Error: INflasi tidak boleh berupa huruf! Coba lagi.";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
     
     roi=roi/100;
     double minimalReturn = (u.Profile.inflationRate/100) + 0.04;
@@ -313,11 +379,24 @@ void menulaporan(){
         cout<<"\n Minimal ROI aman /tahun : "<<minimalReturn*100<<"% per tahun";
         cout<<"\n ROI yang nada masukan "<<roi<<"% per tahun";
         cout<<"\n ------------------------------------------------------------------------------------------------";
-        cout<<"\n [Apabila anda melanjutkan untuk menaruh uang di instrumen yang roi nya di bawah minimal value, \ndana akan berresiko habis di masa tua karena tidak bisa menutup inflasi pertahunnya].";
+        cout<<"\n\n [Apabila anda melanjutkan untuk menaruh uang di instrumen yang roi nya di bawah minimal value, \ndana akan berresiko habis di masa tua karena tidak bisa menutup inflasi pertahunnya].";
         cout<<"\n [1.] Tetap melanjutkan dengan return of investment sekarang";
         cout<<"\n [2.] Mengubah angkar return of investment ke batas minimal aman secara otomatis";
         cout<<"\n ------------------------------------------------------------------------------------------------";
-        cout<<"\n pilihan anda(1-2): ";cin>>menuROI;
+        while(true){
+            cout<<"\n pilihan anda(1-2): ";cin>>menuROI;
+            
+            if(cin.fail()|| menuROI>2){
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "\n [Error] Masukkan pilihan harus berupa angka (1-2)!";
+                cout<<"\n tekan enter...";
+                cin.get();
+            }else{
+                break;
+            }
+        }
+        
         
         if(menuROI == 2){
             roi=minimalReturn;
@@ -337,7 +416,7 @@ void menulaporan(){
     //mencari sisa tahun buat pensiun
     int tahunPensiun=tahunHinggaTarget(u.totalSavings,yearlySav,roi,u.Profile.targetAmount,0);
     
-    cout<<"\n ------------------------------------------------------------------------------------------------";
+    cout<<"\n\n ------------------------------------------------------------------------------------------------";
     cout<<"\n Target Dana F.I.R.E           : "<<formatMoney(u.Profile.targetAmount);
     cout<<"\n Investasi Rutin anda          : "<<monthlySav<<" / bulan";
     cout<<"\n Asumsi Return of Investment   : "<<roi*100<<" % per tahun";
@@ -349,7 +428,7 @@ void menulaporan(){
         usiaPensiun= u.Profile.currentAge + tahunPensiun;
     }
     if( tahunPensiun == -1){
-        cout<<"\n Target tidak tercapai dalam 100 tahun";
+        cout<<"\n\n Target tidak tercapai dalam 100 tahun";
         cout<<"\n naikan nilai pertumbuhan instrumen investasi";
         cout<<"\n ------------------------------------------------------------------------------------------------";
         pauseScreen();
@@ -359,14 +438,14 @@ void menulaporan(){
         if(usiaPensiun<= u.Profile.targetAge){
 
             int pensiunAwal = u.Profile.targetAge - usiaPensiun;
-            cout<<"----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
-            statusPensiun = "----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
+            cout<<"\n\n----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
+            statusPensiun = "\n----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
             cout<<"\n anda pensiun "<<pensiunAwal<<" tahun lebih cepat";
             cout<<"\n ------------------------------------------------------------------------------------------------";
             pauseScreen();
         }else{
             int pensiunTerlambat=   usiaPensiun-u.Profile.targetAge;
-            cout<<"\n ## [PERINGATAN] ##";
+            cout<<"\n\n ## [PERINGATAN] ##";
             cout<<"\n Pensiun anda Terlambat "<<pensiunTerlambat<<" tahun";
             
             cout<<"\n Tabungan / Instrument investasi anda kurang agresif sehingga telambat dari target pensiun";
@@ -426,10 +505,10 @@ void menulaporan(){
         fileLaporan << "* Catatan: Angka di atas merupakan hasil simulasi matematika berdasar asumsi ROI tetap.\n";
         
         fileLaporan.close();
-        cout << "\n [✓] Laporan berhasil disimpan ke file: " << namaFile << "\n";
+        cout << "\n Laporan berhasil disimpan ke file: " << namaFile << "\n";
         pauseScreen();
     } else {
-        cout << "\n [X] Gagal menyimpan laporan ke file.";
+        cout << "\n Gagal menyimpan laporan ke file.";
     }
     
 }
@@ -664,15 +743,19 @@ void halUtama(){
         
         switch(pilHalUtama){
             case 1:
+                system("cls");
                 menuProfile();
                 break;
             case 2:
+                system("cls");
                 menuSetor();
                 break;
             case 3:
+                system("cls");
                 menulaporan();
                 break;
             case 4:
+                system("cls");
                 menuTransaksi();
                 break;
             case 5:
@@ -712,7 +795,7 @@ int main(){
     
         switch (menuAwal){
         case 1:{
-
+            system("cls");
             //register
             //1. pengkondisian apakah memori masi ada
             if(jumlahUser>= userMax){
@@ -754,6 +837,7 @@ int main(){
             break;
         }
         case 2:{
+            system("cls");
             //Login
             //1.masukin uname and password, kasih eror handling uname atau password yang salah
             int attempt=0;
@@ -785,6 +869,7 @@ int main(){
             if(login){
 
                 cout<<"\n Selamat Anda berhasil LOGIN";
+                pauseScreen();
                 //function buat menu apps
                 halUtama();
             }
