@@ -8,6 +8,7 @@ int isexit = false;
 const int maxHistory =100;
 
 struct Transaction{
+    int id;
     int bulan;
     int tahun;
     long long nominal;
@@ -95,8 +96,8 @@ void halUtama(){
         cout << "  +==================================================+\n";
         cout << "  |  [1] Kelola Profil & Target Pensiun              |\n";
         cout << "  |  [2] Setor Celengan                              |\n";
-        cout << "  |  [3] Riwayat & Analisis Tabungan                 |\n";
-        cout << "  |  [4] Proyeksi F.I.R.E                            |\n";
+        cout << "  |  [3] Proyeksi F.I.R.E                            |\n";
+        cout << "  |  [4] Hapus, Cari & Tampilkan Transaksi           |\n";
         cout << "  |  [0] Simpan, Logout & Keluar                     |\n";
         cout << "  +==================================================+\n";
         cout << "\n  Pilih Menu (0-4): "; cin >> pilHalUtama;
@@ -131,7 +132,7 @@ void halUtama(){
 void menuProfile(){
     users& u=user[userAktif];
     char pilih;
-    //buat pengkondisian kallau pernah ngisi profile belum kalao belum ngisi kaalu udah tampilin yang lama
+    //buat pengkondisian kalau pernah ngisi profile belum kalao belum ngisi kaalu udah tampilin yang lama
     if(u.Profile.isDone){
         cout<<"\n Data Proflie Anda: ";
         cout<<"------------------------------------------------------";
@@ -225,6 +226,7 @@ void menuSetor(){
 
     //nyimpan ke array history user yang aktif
     int idx = u.jumlahTransaksi; //buat nampung index transaksi yang sekarang
+    u.history[idx].id = idx + 1;
     u.history[idx].bulan = bln; //masukin data transaksi ke database riwayat
     u.history[idx].tahun = thn;   
     u.history[idx].nominal = nominal;
@@ -272,6 +274,162 @@ void proyeksiKeuangan(){
 
 
 
+}
+
+void menuTransaksi(){
+    users& u = user[userAktif];
+    int pilSub;
+
+    do{
+        cout << "\n+==================================================+\n";
+        cout << " |   [FIRE] KELOLA, CARI & HAPUS                    |\n";
+        cout << "+==================================================+\n";
+        cout << " |  [1] Tampilkan Semua Transaksi                   |\n";
+        cout << " |  [2] Cari Transaksi                              |\n";
+        cout << " |  [3] Hapus Transaksi                             |\n";
+        cout << " |  [0] Kembali ke Menu Utama                       |\n";
+        cout << "+==================================================+\n";
+        cout << "Pilih Menu (0-3): "; cin >> pilSub;
+
+        if(cin.fail()){
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "\n [Error] Masukkan pilihan harus berupa angka (0-3)!\n";
+            pauseScreen();
+            continue;
+        }
+        cin.ignore();
+
+        switch(pilSub){
+            case 1:{
+                 cout << "\n================ DAFTAR TRANSAKSI ================\n";
+                if(u.jumlahTransaksi == 0){
+                    cout << "Belum ada transaksi yang tercatat.\n";
+                }else{
+                    cout << "-----------------------------------------------\n";
+                    cout << " ID  | Bulan/Tahun | Nominal (Rp) | Catatan\n";
+                    cout << "-----------------------------------------------\n";
+                    for(int i = 0; i < u.jumlahTransaksi; i++){
+                        cout << " " << u.history[i].id << "   | "
+                             << u.history[i].bulan << "/" << u.history[i].tahun << "  | "
+                             << formatMoney(u.history[i].nominal) << "  | "
+                             << u.history[i].catatan << "\n";
+                    } 
+                    cout << "--------------------------------------------------\n";
+                    cout << " Total Saldo Saat Ini: " << formatMoney(u.totalSavings) << "\n";
+                }
+                cout << "==================================================\n";
+                pauseScreen();
+                break;
+            }
+               
+            case 2:{
+                if(u.jumlahTransaksi == 0){
+                    cout << "\n Belum terdapat transaksi yang tercatat.\n";
+                    pauseScreen();
+                    break;
+                }
+
+                int idCari;
+                cout << "\n Masukkan ID transaksi yang ingin dicari: ";
+                cin >> idCari;
+
+                if(cin.fail()){
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << "\n [Error] ID harus berupa angka!\n";
+                    pauseScreen();
+                    break;
+                }
+                cin.ignore();
+
+                bool ditemukan = false;
+                for(int i = 0; i < u.jumlahTransaksi; i++){
+                    if(u.history[i].id == idCari){
+                        cout << "\n---------------- HASIL PENCARIAN ----------------\n";
+                        cout << " ID  | Bulan/Tahun | Nominal (Rp) | Catatan\n";
+                        cout << "-----------------------------------------------\n";
+                        cout << " " << u.history[i].id << "   | "
+                             << u.history[i].bulan << "/" << u.history[i].tahun << "  | "
+                             << formatMoney(u.history[i].nominal) << "  | "
+                             << u.history[i].catatan << "\n";
+                        ditemukan = true;
+                        break;
+                    }
+                }
+                if(!ditemukan){
+                    cout << "\n [!] Transaksi dengan ID " << idCari << " tidak ditemukan.\n";
+                }
+                cout << "------------------------------------------------\n";
+                pauseScreen();
+                break
+            }
+               
+            case 3:{
+                if(u.jumlahTransaksi == 0){
+                    cout << "\n [!] Belum ada transaksi yang tercatat.\n";
+                    pauseScreen();
+                    break;
+                }
+
+                cout << "\n  ID  | Bulan/Tahun | Nominal (Rp) | Catatan\n";
+                cout << "-----------------------------------------------\n";
+                for(int i = 0; i < u.jumlahTransaksi; i++){
+                    cout << " " << u.history[i].id << "   | "
+                         << u.history[i].bulan << "/" << u.history[i].tahun << "  | "
+                         << formatMoney(u.history[i].nominal) << "  | "
+                         << u.history[i].catatan << "\n";
+                }
+                cout << "------------------------------------------------\n";
+                
+                int idHapus;
+                cout << " Masukkan ID transaksi yang ingin dihapus: ";
+                cin >> idHapus;
+
+                if(cin.fail()){
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << "\n [Error] ID harus berupa angka!\n";
+                    pauseScreen();
+                    break;
+                }
+                cin.ignore();
+
+                int idxHapus = -1;
+                for(int i = 0; i < u.jumlahTransaksi; i++){
+                    if(u.history[i].id == idHapus){
+                        idxHapus = i;
+                        break;
+                    }
+                }
+
+                if(idxHapus == -1){
+                    cout << "\n [!] Transaksi dengan ID " << idHapus << " tidak ditemukan.\n";
+                }else{
+                    u.totalSavings -= u.history[idxHapus].nominal; //update total saldo setelah hapus transaksi
+
+                    for(int i = idxHapus; i < u.jumlahTransaksi - 1; i++){
+                        u.history[i] = u.history[i + 1]; //geser transaksi setelah yang dihapus ke kiri
+                    }
+                    u.jumlahTransaksi--; //update jumlah transaksi
+
+                    saveAll(); //simpan perubahan ke file
+
+                    cout << "\n [OK] Transaksi dengan ID " << idHapus << " berhasil dihapus!\n";
+                    cout << " Tota; Saldo Saat Ini: " << formatMoney(u.totalSavings) << "\n";
+                }
+                pauseScreen();
+                break;
+            }
+              
+            case 0:
+                break;
+            default:
+                cout << "\n [Error] Pilihan tidak valid! Masukkan angka antara 0-3.\n";
+                pauseScreen();
+        }
+    }
+    while(pilSub != 0);
 }
 
 void loadData(){
