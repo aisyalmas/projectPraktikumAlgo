@@ -47,7 +47,7 @@ int userAktif=-1;
 string usernameNew,passwordNew,logPass,logUser;
 
 void pauseScreen(){
-    cout<<"\n Tekan Enter jika ingin kembali ..... ";
+    cout<<"\n Tekan Enter jika ingin melanjutkan ..... ";
     cin.ignore();
     cin.get();
 }
@@ -133,16 +133,67 @@ void menuProfile(){
         cout<<"\n------------------------------------------------------";
         
         pauseScreen();
-        cout<<"\n Update Profile anda?(y/n):";cin>>pilih;
+        cout<<"\n Update Profile anda?(y/n):";cin>>pilih;    
+          
         if(pilih != 'y' && pilih !='Y')return;
     }
+
     //ngisi profile kalau belum
+<<<<<<< HEAD
     cout<<"\n--------------------------------------------------------------------------";
     cout<<"\n Masukan data Profile Anda \n";
     cout<<"\n Umur Sekarang             : "; cin>>u.Profile.currentAge;
     cout<<" Target Umur Pensiun Dini  : "; cin>>u.Profile.targetAge;
     cout<<" Asumsi Tingkat Inflasi(%) : "; cin>>u.Profile.inflationRate;
     cout<<" Pengeluaran anda (/month) : "; cin>>u.Profile.monthlyExpense;
+=======
+
+    cout<<"\n Masukan data Profile Anda: \n";
+    cout<<"\n------------------------------------------------------";
+    while(true){
+        cout<<"\n Umur Sekarang : ";cin>>u.Profile.currentAge;
+        if(cin.fail()|| u.Profile.currentAge<=0){
+            cout << " [!] Error: Umur tidak boleh negatif, nol, atau berupa huruf! Coba lagi.\n";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
+    while(true){
+        
+        cout<<"\n Target Umur Pensiun Dini : ";cin>>u.Profile.targetAge;
+        if(cin.fail()|| u.Profile.targetAge<=0){
+            cout << " [!] Error: Umur tidak boleh negatif, nol, atau berupa huruf! Coba lagi.\n";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
+    while(true){
+        
+        cout<<"\n Asumsi Tingkat Inflasi(%) : ";cin>>u.Profile.inflationRate;
+        if(cin.fail()){
+            cout << " [!] Error: INflasi tidak boleh berupa huruf! Coba lagi.\n";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
+    while(true){     
+        cout<<"\n Pengeluaran anda (/month) : ";cin>>u.Profile.monthlyExpense;
+        if(cin.fail()|| u.Profile.monthlyExpense <=0){
+            cout << " [!] Error: Tidak boleh 0 ataupun berupa huruf Coba lagi.\n";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
+
+>>>>>>> 565dce8ad224a27889c46ab737245e09999e0eea
     
     int jarakTahun = u.Profile.targetAge -u.Profile.currentAge;
     //udah ngisi profile
@@ -277,7 +328,11 @@ void menulaporan(){
         avgMonthly = totalNominal / u.jumlahTransaksi;
     }
 
+<<<<<<< HEAD
     cout<<"\n =================== CETAK LAPORAN LENGKAP ========================\n";
+=======
+    cout<<"\n ====================== CETAK LAPORAN ANALISIS ===========================\n";
+>>>>>>> 565dce8ad224a27889c46ab737245e09999e0eea
     if(!u.Profile.isDone){
         cout<<"\n Lengkapi profile terlebih dahulu, bisa di isi di menu [1].";
         pauseScreen();
@@ -292,7 +347,24 @@ void menulaporan(){
     }
     cout<<"\n [!] Atau ingin memasukan target tabungan sendiri /month\n";
     cout<<"\n Berapa target tabungan rutin perbulan?";
+<<<<<<< HEAD
     cout<<"\n Pilihan Anda (Rp) : ";cin>>monthlySav;
+=======
+
+     while(true){
+        cout<<"\n pilihan anda (Rp ) :";cin>>monthlySav;
+            
+            if(cin.fail()){
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "\n [Error] Masukkan pilihan harus berupa angka!";
+                cout<<"\n tekan enter...";
+                cin.get();
+            }else{
+                break;
+            }
+        }
+>>>>>>> 565dce8ad224a27889c46ab737245e09999e0eea
     
     if(monthlySav<=0 && avgMonthly>0){
         monthlySav =avgMonthly;
@@ -301,7 +373,18 @@ void menulaporan(){
     }
     
     double roi;
-    cout<<"\n Asumsi Return of investment (ROI) yang diletakan pada instrument investasi /tahun(%): ";cin>>roi;
+    
+    while(true){
+        cout<<"\n Asumsi Return of investment (ROI) yang diletakan pada instrument investasi /tahun(%): ";cin>>roi;
+        
+        if(cin.fail()){
+            cout << " [!] Error: INflasi tidak boleh berupa huruf! Coba lagi.";
+            cin.clear();
+            cin.ignore(1000,'\n');
+        }else{
+            break;
+        }
+    }
     
     roi=roi/100;
     double minimalReturn = (u.Profile.inflationRate/100) + 0.04;
@@ -312,13 +395,30 @@ void menulaporan(){
         cout<<"\n Inflasi diasumsikan     : "<<u.Profile.inflationRate<<"%";
         cout<<"\n Aturan Penarikan aman   : "<<"4%";
         cout<<"\n Minimal ROI aman /tahun : "<<minimalReturn*100<<"% per tahun";
-        cout<<"\n ROI yang nada masukan "<<roi<<"% per tahun";
+        cout<<"\n ROI yang nada masukan   :"<<roi*100<<"% per tahun";
         cout<<"\n ------------------------------------------------------------------------------------------------";
+<<<<<<< HEAD
         cout<<"\n [Apabila anda melanjutkan untuk menaruh uang di instrumen yang roi nya di bawah minimal value, \n dana akan berresiko habis di masa tua karena tidak bisa menutup inflasi pertahunnya].";
+=======
+        cout<<"\n\n [Apabila anda melanjutkan untuk menaruh uang di instrumen yang roi nya di bawah minimal value, \ndana akan berresiko habis di masa tua karena tidak bisa menutup inflasi pertahunnya].";
+>>>>>>> 565dce8ad224a27889c46ab737245e09999e0eea
         cout<<"\n [1.] Tetap melanjutkan dengan return of investment sekarang";
         cout<<"\n [2.] Mengubah angka return of investment ke batas minimal aman secara otomatis";
         cout<<"\n ------------------------------------------------------------------------------------------------";
-        cout<<"\n pilihan anda(1-2): ";cin>>menuROI;
+        while(true){
+            cout<<"\n pilihan anda(1-2): ";cin>>menuROI;
+            
+            if(cin.fail()|| menuROI>2){
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "\n [Error] Masukkan pilihan harus berupa angka (1-2)!";
+                cout<<"\n tekan enter...";
+                cin.get();
+            }else{
+                break;
+            }
+        }
+        
         
         if(menuROI == 2){
             roi=minimalReturn;
@@ -338,9 +438,9 @@ void menulaporan(){
     //mencari sisa tahun buat pensiun
     int tahunPensiun=tahunHinggaTarget(u.totalSavings,yearlySav,roi,u.Profile.targetAmount,0);
     
-    cout<<"\n ------------------------------------------------------------------------------------------------";
+    cout<<"\n\n ------------------------------------------------------------------------------------------------";
     cout<<"\n Target Dana F.I.R.E           : "<<formatMoney(u.Profile.targetAmount);
-    cout<<"\n Investasi Rutin anda          : "<<monthlySav<<" / bulan";
+    cout<<"\n Investasi Rutin anda          : "<<formatMoney(monthlySav)<<" / bulan";
     cout<<"\n Asumsi Return of Investment   : "<<roi*100<<" % per tahun";
     cout<<"\n ------------------------------------------------------------------------------------------------";
     
@@ -350,7 +450,7 @@ void menulaporan(){
         usiaPensiun= u.Profile.currentAge + tahunPensiun;
     }
     if( tahunPensiun == -1){
-        cout<<"\n Target tidak tercapai dalam 100 tahun";
+        cout<<"\n\n Target tidak tercapai dalam 100 tahun";
         cout<<"\n naikan nilai pertumbuhan instrumen investasi";
         cout<<"\n ------------------------------------------------------------------------------------------------";
         pauseScreen();
@@ -360,14 +460,20 @@ void menulaporan(){
         if(usiaPensiun<= u.Profile.targetAge){
 
             int pensiunAwal = u.Profile.targetAge - usiaPensiun;
+<<<<<<< HEAD
             cout<<"\n----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
             statusPensiun = "----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU ATAU LEBIH CEPAT] @@-----";
             cout<<"\n Anda pensiun "<<pensiunAwal<<" tahun lebih cepat";
+=======
+            cout<<"\n\n----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
+            statusPensiun = "\n----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
+            cout<<"\n anda pensiun "<<pensiunAwal<<" tahun lebih cepat";
+>>>>>>> 565dce8ad224a27889c46ab737245e09999e0eea
             cout<<"\n ------------------------------------------------------------------------------------------------";
             pauseScreen();
         }else{
             int pensiunTerlambat=   usiaPensiun-u.Profile.targetAge;
-            cout<<"\n ## [PERINGATAN] ##";
+            cout<<"\n\n ## [PERINGATAN] ##";
             cout<<"\n Pensiun anda Terlambat "<<pensiunTerlambat<<" tahun";
             
             cout<<"\n Tabungan / Instrument investasi anda kurang agresif sehingga telambat dari target pensiun";
@@ -376,10 +482,20 @@ void menulaporan(){
             pauseScreen();
         }
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 565dce8ad224a27889c46ab737245e09999e0eea
    
     //for decision making
     long long saldoBerjalan = u.totalSavings;
-    int lamaSimulasi = (tahunPensiun == -1 || tahunPensiun > maxTahun) ? maxTahun : tahunPensiun;
+    int lamaSimulasi = maxTahun; 
+
+    if (tahunPensiun != -1 && (tahunPensiun + 1) < maxTahun) {
+        lamaSimulasi = tahunPensiun + 1;
+    } else if (tahunPensiun != -1) {
+        lamaSimulasi = maxTahun; 
+    }
     
     for (int i = 0; i < lamaSimulasi; i++) {
         tabel[i][0] = i + 1;                             // Tahun ke-
@@ -425,10 +541,10 @@ void menulaporan(){
         fileLaporan << "* Catatan: Angka di atas merupakan hasil simulasi matematika berdasar asumsi ROI tetap.\n";
         
         fileLaporan.close();
-        cout << "\n [✓] Laporan berhasil disimpan ke file: " << namaFile << "\n";
+        cout << "\n Laporan berhasil disimpan ke file: " << namaFile << "\n";
         pauseScreen();
     } else {
-        cout << "\n [X] Gagal menyimpan laporan ke file.";
+        cout << "\n Gagal menyimpan laporan ke file.";
     }
     
 }
@@ -632,42 +748,54 @@ void loadData(){
 void halUtama(){
     int pilHalUtama;
     users& u = user[userAktif];
-
-    do{
-        system("cls");
-        cout << "\n  +==================================================+\n";
-        cout << "  |   [FIRE]  F.I.R.E. MAIN MENU                     |\n";
-        cout << "  |   Financial Independence, Retire Early           |\n";
-        cout << "  +==================================================+\n";
-        cout << "     Halo, " << user[userAktif].username << "!\n"; 
-        cout << "     Saldo: " << formatMoney(u.totalSavings) << "\n"; 
+<<<<<<< HEAD
         
-        cout << "  +==================================================+\n";
-        cout << "  |  [1] Kelola Profil & Target Pensiun              |\n";
-        cout << "  |  [2] Setor Celengan                              |\n";
-        cout << "  |  [3] Proyeksi dan Laporan F.I.R.E                |\n";
-        cout << "  |  [4] Hapus, Cari & Tampilkan Transaksi           |\n";
-        cout << "  |  [0] Simpan, Logout & Keluar                     |\n";
-        cout << "  +==================================================+\n";
-        cout << "\n  Pilih Menu (0-4): "; cin >> pilHalUtama;
+        do{
 
-        cin.ignore();
-
+            system("cls");
+            cout << "\n+==================================================+\n";
+            cout << "  |   [FIRE]  F.I.R.E. MAIN MENU                     |\n";
+            cout << "  |   Financial Independence, Retire Early           |\n";
+            cout << "  +==================================================+\n";
+            cout << "  |  Halo, " << user[userAktif].username << "!\t\t\t|\n"; // \t tu kaya tab buat ngasih jarak
+            //cout << "  |  Saldo: " << u.Profile.currentSavings << "\t\t\t\t     |\n"; 
+            
+            cout << "  +==================================================+\n";
+            cout << "  |  [1] Kelola Profil & Target Pensiun              |\n";
+            cout << "  |  [2] Setor Celengan                              |\n";
+            cout << "  |  [3] Proyeksi dan Laporan F.I.R.E                |\n";
+            cout << "  |  [4] Hapus, Cari & Tampilkan Transaksi           |\n";
+            cout << "  |  [5] Simpan, Logout & Keluar                     |\n";
+            cout << "  +==================================================+\n";
+            cout << "\n  Pilih Menu (1-5): "; cin >> pilHalUtama;
+    
+            if(cin.fail()){
+                        cin.clear();
+                        cin.ignore(1000,'\n');
+                        cout<<" kesalahan dalam input!";
+                        pauseScreen();
+                        pilHalUtama=0;
+            }
+        }while(pilHalUtama<1 || pilHalUtama>5);
         
         switch(pilHalUtama){
             case 1:
+                system("cls");
                 menuProfile();
                 break;
             case 2:
+                system("cls");
                 menuSetor();
                 break;
             case 3:
+                system("cls");
                 menulaporan();
                 break;
             case 4:
+                system("cls");
                 menuTransaksi();
                 break;
-            case 0:
+            case 5:
                 saveAll();
                 cout << "\nTerima kasih telah menggunakan aplikasi kami. Sampai jumpa!\n";
                 pauseScreen();
@@ -675,7 +803,7 @@ void halUtama(){
             default:
                 cout << "\nPilihan tidak valid. Silakan pilih antara 0-4.\n";
         } 
-    }while(pilHalUtama != 0);
+    }while(pilHalUtama != 5);
 }
 
 int main(){
@@ -704,7 +832,7 @@ int main(){
     
         switch (menuAwal){
         case 1:{
-
+            system("cls");
             //register
             //1. pengkondisian apakah memori masi ada
             if(jumlahUser>= userMax){
@@ -746,6 +874,7 @@ int main(){
             break;
         }
         case 2:{
+            system("cls");
             //Login
             //1.masukin uname and password, kasih eror handling uname atau password yang salah
             int attempt=0;
@@ -777,6 +906,7 @@ int main(){
             if(login){
 
                 cout<<"\n Selamat Anda berhasil LOGIN";
+                pauseScreen();
                 //function buat menu apps
                 halUtama();
             }
@@ -785,7 +915,12 @@ int main(){
         }
         case 3:
             //keluar program
+<<<<<<< HEAD
             cout<<"\nTerimakasih telah menggunakan apps kami ;))";
+=======
+            system("cls");
+            cout<<"terimakasih telah menggunakan apps kammi ;))";
+>>>>>>> 565dce8ad224a27889c46ab737245e09999e0eea
             //exit
             isexit = true;
             break;
