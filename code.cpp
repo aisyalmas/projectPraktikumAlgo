@@ -317,14 +317,14 @@ void menulaporan(){
             totalNominal += u.history[i].nominal;
         }
         avgMonthly = totalNominal / u.jumlahTransaksi;
-    }
+    }//ini buat ngitung avg
 
     cout<<"\n ====================== CETAK LAPORAN ANALISIS ===========================\n";
     if(!u.Profile.isDone){
         cout<<"\n Lengkapi profile terlebih dahulu, bisa di isi di menu [1].";
         pauseScreen();
         return;
-    }
+    } //harus ngisi profile dulu
 
     cout<<"\n --------------------------------------------------------------";
     if(avgMonthly>0){
@@ -370,7 +370,7 @@ void menulaporan(){
     }
     
     roi=roi/100;
-    double minimalReturn = (u.Profile.inflationRate/100) + 0.04;
+    double minimalReturn = (u.Profile.inflationRate/100) + 0.04; //minimal return value
     
     int menuROI;
     if(roi< minimalReturn){
@@ -464,10 +464,10 @@ void menulaporan(){
     if (tahunPensiun != -1 && (tahunPensiun + 1) < maxTahun) {
         lamaSimulasi = tahunPensiun + 1; //kalau tercapai tahun masih oke
     } else if (tahunPensiun != -1) {
-        lamaSimulasi = maxTahun; 
+        lamaSimulasi = maxTahun; //kalau ga tercapai menggunakan max
     }
     
-    for (int i = 0; i < lamaSimulasi; i++) {
+    for (int i = 0; i < lamaSimulasi; i++) {//isinya bakaal ada di bawal
         tabel[i][0] = i + 1;                             // Tahun ke-
         tabel[i][1] = u.Profile.currentAge + (i + 1);    // Usia pada tahun itu
         tabel[i][2] = saldoBerjalan;                     // Saldo awal tahun
@@ -479,7 +479,7 @@ void menulaporan(){
     }
     
     string namaFile = u.username + "_laporan_fire.txt"; 
-    ofstream fileLaporan(namaFile);
+    ofstream fileLaporan(namaFile);//bikin laporan simulasi file per orangan
     
     if (fileLaporan.is_open()) {
         fileLaporan << "=================================================================================\n";
@@ -505,8 +505,8 @@ void menulaporan(){
             fileLaporan << " " << tabel[i][0] << "\t| " 
                         << tabel[i][1] << "\t| "
                         << formatMoney((long long)tabel[i][2]) << "\t\t| "
-                        << formatMoney((long long)tabel[i][3]) << "\t\t| "
-                        << formatMoney((long long)tabel[i][4]) << "\n";
+                        << formatMoney((long long)tabel[i][3]) << "\t\t "
+                        << formatMoney((long long)tabel[i][4]) << "\n";//long long ngubah format tipe data namanya casting
         }
         fileLaporan << "---------------------------------------------------------------------------------\n";
         fileLaporan << "* Catatan: Angka di atas merupakan hasil simulasi matematika berdasar asumsi ROI tetap.\n";
@@ -730,7 +730,7 @@ void halUtama(){
             cout << "  |   Financial Independence, Retire Early           |\n";
             cout << "  +==================================================+\n";
             cout << "     Halo, " << user[userAktif].username << "\n"; 
-            cout << "     Saldo: " << user[userAktif].totalSavings << "\n"; 
+            cout << "     Saldo: " << formatMoney(user[userAktif].totalSavings) << "\n"; 
             
             cout << "  +==================================================+\n";
             cout << "  |  [1] Kelola Profil & Target Pensiun              |\n";
