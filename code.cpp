@@ -137,63 +137,13 @@ void menuProfile(){
           
         if(pilih != 'y' && pilih !='Y')return;
     }
-
     //ngisi profile kalau belum
-<<<<<<< HEAD
     cout<<"\n--------------------------------------------------------------------------";
     cout<<"\n Masukan data Profile Anda \n";
     cout<<"\n Umur Sekarang             : "; cin>>u.Profile.currentAge;
     cout<<" Target Umur Pensiun Dini  : "; cin>>u.Profile.targetAge;
     cout<<" Asumsi Tingkat Inflasi(%) : "; cin>>u.Profile.inflationRate;
     cout<<" Pengeluaran anda (/month) : "; cin>>u.Profile.monthlyExpense;
-=======
-
-    cout<<"\n Masukan data Profile Anda: \n";
-    cout<<"\n------------------------------------------------------";
-    while(true){
-        cout<<"\n Umur Sekarang : ";cin>>u.Profile.currentAge;
-        if(cin.fail()|| u.Profile.currentAge<=0){
-            cout << " [!] Error: Umur tidak boleh negatif, nol, atau berupa huruf! Coba lagi.\n";
-            cin.clear();
-            cin.ignore(1000,'\n');
-        }else{
-            break;
-        }
-    }
-    while(true){
-        
-        cout<<"\n Target Umur Pensiun Dini : ";cin>>u.Profile.targetAge;
-        if(cin.fail()|| u.Profile.targetAge<=0){
-            cout << " [!] Error: Umur tidak boleh negatif, nol, atau berupa huruf! Coba lagi.\n";
-            cin.clear();
-            cin.ignore(1000,'\n');
-        }else{
-            break;
-        }
-    }
-    while(true){
-        
-        cout<<"\n Asumsi Tingkat Inflasi(%) : ";cin>>u.Profile.inflationRate;
-        if(cin.fail()){
-            cout << " [!] Error: INflasi tidak boleh berupa huruf! Coba lagi.\n";
-            cin.clear();
-            cin.ignore(1000,'\n');
-        }else{
-            break;
-        }
-    }
-    while(true){     
-        cout<<"\n Pengeluaran anda (/month) : ";cin>>u.Profile.monthlyExpense;
-        if(cin.fail()|| u.Profile.monthlyExpense <=0){
-            cout << " [!] Error: Tidak boleh 0 ataupun berupa huruf Coba lagi.\n";
-            cin.clear();
-            cin.ignore(1000,'\n');
-        }else{
-            break;
-        }
-    }
-
->>>>>>> 565dce8ad224a27889c46ab737245e09999e0eea
     
     int jarakTahun = u.Profile.targetAge -u.Profile.currentAge;
     //udah ngisi profile
@@ -328,11 +278,7 @@ void menulaporan(){
         avgMonthly = totalNominal / u.jumlahTransaksi;
     }
 
-<<<<<<< HEAD
     cout<<"\n =================== CETAK LAPORAN LENGKAP ========================\n";
-=======
-    cout<<"\n ====================== CETAK LAPORAN ANALISIS ===========================\n";
->>>>>>> 565dce8ad224a27889c46ab737245e09999e0eea
     if(!u.Profile.isDone){
         cout<<"\n Lengkapi profile terlebih dahulu, bisa di isi di menu [1].";
         pauseScreen();
@@ -780,19 +726,15 @@ void halUtama(){
         
         switch(pilHalUtama){
             case 1:
-                system("cls");
                 menuProfile();
                 break;
             case 2:
-                system("cls");
                 menuSetor();
                 break;
             case 3:
-                system("cls");
                 menulaporan();
                 break;
             case 4:
-                system("cls");
                 menuTransaksi();
                 break;
             case 5:
