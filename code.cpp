@@ -268,7 +268,7 @@ void menuSetor(){
     u.history[idx].catatan = catatan; 
     u.jumlahTransaksi++; //update jumlah transaksi    
     
-    long double sisaTarget = u.Profile.targetAmount - u.totalSavings; //hitung sisa target aset   
+    long long sisaTarget = u.Profile.targetAmount - u.totalSavings; //hitung sisa target aset   
     if(sisaTarget < 0){
         sisaTarget = 0;
         cout<<"\n CONGRATSS!!!! TARGET F.I.R.E ANDA TERCAPAIIIII";
@@ -412,7 +412,7 @@ void menulaporan(){
     
     //untuk array 2d
     const int maxTahun = 50;
-    double tabel[maxTahun][5];
+    double tabel[maxTahun][5]; //limapuluhtahun simulasi, umur, saldo,invest,target
     //mencari sisa tahun buat pensiun
     int tahunPensiun=tahunHinggaTarget(u.totalSavings,yearlySav,roi,u.Profile.targetAmount,0);
     
@@ -461,7 +461,7 @@ void menulaporan(){
     int lamaSimulasi = maxTahun; 
 
     if (tahunPensiun != -1 && (tahunPensiun + 1) < maxTahun) {
-        lamaSimulasi = tahunPensiun + 1;
+        lamaSimulasi = tahunPensiun + 1; //kalau tercapai tahun masih di batas oke
     } else if (tahunPensiun != -1) {
         lamaSimulasi = maxTahun; 
     }
@@ -473,7 +473,7 @@ void menulaporan(){
         tabel[i][3] = yearlySav;                         // Setoran setahun
         
         
-        saldoBerjalan = (saldoBerjalan + yearlySav) * (1.0 + roi);
+        saldoBerjalan = (saldoBerjalan + yearlySav) * (1 + roi);
         tabel[i][4] = saldoBerjalan;                     // Saldo akhir tahun
     }
     
@@ -673,7 +673,7 @@ void menuTransaksi(){
               
             case 0:
             break;
-            
+
             default:
             cout << "\n [Error] Pilihan tidak valid! Masukkan angka antara 0-3.\n";
             pauseScreen();
