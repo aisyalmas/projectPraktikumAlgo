@@ -121,7 +121,7 @@ void menuProfile(){
     //buat pengkondisian kalau pernah ngisi profile belum kalao belum ngisi kaalu udah tampilin yang lama
     if(u.Profile.isDone){
         cout<<"\n Data Proflie Anda: ";
-        cout<<"\n------------------------------------------------------";
+        cout<<"\n -----------------------------------------------------";
         cout<<"\n Username            : "<<u.username;
         cout<<"\n Umur Sekarang       : "<<u.Profile.currentAge;
         cout<<"\n Target Usia Pensiun : "<<u.Profile.targetAge;
@@ -137,12 +137,12 @@ void menuProfile(){
         if(pilih != 'y' && pilih !='Y')return;
     }
     //ngisi profile kalau belum
-    cout<<"\n Masukan data Profile Anda: \n";
-    cout<<"\n------------------------------------------------------";
-    cout<<"\n Umur Sekarang : ";cin>>u.Profile.currentAge;
-    cout<<"\n Target Umur Pensiun Dini : ";cin>>u.Profile.targetAge;
-    cout<<"\n Asumsi Tingkat Inflasi(%) : ";cin>>u.Profile.inflationRate;
-    cout<<"\n Pengeluaran anda (/month) : ";cin>>u.Profile.monthlyExpense;
+    cout<<"\n--------------------------------------------------------------------------";
+    cout<<"\n Masukan data Profile Anda \n";
+    cout<<"\n Umur Sekarang             : "; cin>>u.Profile.currentAge;
+    cout<<" Target Umur Pensiun Dini  : "; cin>>u.Profile.targetAge;
+    cout<<" Asumsi Tingkat Inflasi(%) : "; cin>>u.Profile.inflationRate;
+    cout<<" Pengeluaran anda (/month) : "; cin>>u.Profile.monthlyExpense;
     
     int jarakTahun = u.Profile.targetAge -u.Profile.currentAge;
     //udah ngisi profile
@@ -164,8 +164,8 @@ void menuProfile(){
     
     cout<<"\n --------------------------------------------------------------------------";
     cout<<"\n Pengeluaran Masa Depan : "<<formatMoney(futureValue); cout<<"/ tahun";
-    cout<<"\n Target Kekayaan : "<<formatMoney(u.Profile.targetAmount); 
-    cout<<"\n Sisa Waktu Pencapaian : "<< jarakTahun<<" tahun"; 
+    cout<<"\n Target Kekayaan        : "<<formatMoney(u.Profile.targetAmount); 
+    cout<<"\n Sisa Waktu Pencapaian  : "<< jarakTahun<<" tahun"; 
     cout<<"\n --------------------------------------------------------------------------";
     
     pauseScreen();
@@ -184,14 +184,15 @@ void menuSetor(){
         pauseScreen();
         return;
     }
-    cout << "\n+==================================================+\n";
+    
+    cout << "\n +=================================================+\n";
     cout << " |   [FIRE] F.I.R.E. DASHBOARD                      |\n";
     cout << " |   Setor Celengan                                 |\n";
-    cout << "+==================================================+\n";
+    cout << " +=================================================+\n";
     cout << "\n Masukkan detail setoran:\n\n";
     
     while(true){
-        cout << "Bulan (1-12): "; cin >> bln;
+        cout << " Bulan (1-12) : "; cin >> bln;
         if(!cin.fail() && bln >= 1 && bln <=12){ //cek validasi input bulan yang harus angka dan 1-12
             break; //input bener, keluar dari loop bulan
         }
@@ -200,10 +201,10 @@ void menuSetor(){
         cout << "[Error] Bulan tidak valid! Masukkan bulan 1-12.\n";
     } 
     
-    cout << "Tahun: "; cin >> thn;
+    cout << " Tahun        : "; cin >> thn;
     
     while(true){
-        cout << "Nominal (Rp): "; cin >> nominal;
+        cout << " Nominal (Rp) : "; cin >> nominal;
         if(!cin.fail() && nominal >0 ){ //cek validasi input nominal yang harus angka dan lebih besar dari 0
             break; //input bener, keluar dari loop nominal
         }
@@ -213,7 +214,7 @@ void menuSetor(){
     }
     
     cin.ignore();
-    cout << "Catatan: "; getline(cin, catatan);
+    cout << " Catatan      : "; getline(cin, catatan);
     
     u.totalSavings += nominal; //menambah dan update total saldo
     
@@ -233,7 +234,7 @@ void menuSetor(){
     }
 
     //tampilkan output berhasil
-    cout << "[OK] Setoran berhasil dicatat!\n";
+    cout << "\n[OK] Setoran berhasil dicatat!\n\n";
     cout << "----------------------------------------------------\n";
     cout << "Jumlah setor : "<<formatMoney(nominal)<< "\n";
     cout << "Total saldo  : "<<formatMoney(u.totalSavings)<< "\n";
@@ -276,27 +277,27 @@ void menulaporan(){
         avgMonthly = totalNominal / u.jumlahTransaksi;
     }
 
-    cout<<"\n ====================== CETAK LAPORAN LENGKAP ===========================\n";
+    cout<<"\n =================== CETAK LAPORAN LENGKAP ========================\n";
     if(!u.Profile.isDone){
         cout<<"\n Lengkapi profile terlebih dahulu, bisa di isi di menu [1].";
         pauseScreen();
         return;
     }
 
-    cout<<"\n --------------------------------------------------";
+    cout<<"\n -----------------------------------------------------------";
     if(avgMonthly>0){
         cout<<"\n Tabungan Rutin /month (Rp) [ rata-rata: "<<formatMoney(avgMonthly)<<"]";     
-        cout<<"\n --------------------------------------------------";
-        cout<<"\n [!] apabila ingin menggunakan rata-rata diatas (0)";
+        cout<<"\n -----------------------------------------------------------";
+        cout<<"\n [!] Apabila ingin menggunakan rata-rata diatas (0)";
     }
-    cout<<"\n [!] atau ingin memasukan target tabungan sendiri /month\n";
+    cout<<"\n [!] Atau ingin memasukan target tabungan sendiri /month\n";
     cout<<"\n Berapa target tabungan rutin perbulan?";
-    cout<<"\n pilihan anda (Rp ) :";cin>>monthlySav;
+    cout<<"\n Pilihan Anda (Rp) : ";cin>>monthlySav;
     
     if(monthlySav<=0 && avgMonthly>0){
         monthlySav =avgMonthly;
     }else if(monthlySav<=0){
-        cout<<"\n masukan nominal investasi bulanan anda";
+        cout<<"\n Masukkan nominal investasi bulanan Anda!";
     }
     
     double roi;
@@ -313,9 +314,9 @@ void menulaporan(){
         cout<<"\n Minimal ROI aman /tahun : "<<minimalReturn*100<<"% per tahun";
         cout<<"\n ROI yang nada masukan "<<roi<<"% per tahun";
         cout<<"\n ------------------------------------------------------------------------------------------------";
-        cout<<"\n [Apabila anda melanjutkan untuk menaruh uang di instrumen yang roi nya di bawah minimal value, \ndana akan berresiko habis di masa tua karena tidak bisa menutup inflasi pertahunnya].";
+        cout<<"\n [Apabila anda melanjutkan untuk menaruh uang di instrumen yang roi nya di bawah minimal value, \n dana akan berresiko habis di masa tua karena tidak bisa menutup inflasi pertahunnya].";
         cout<<"\n [1.] Tetap melanjutkan dengan return of investment sekarang";
-        cout<<"\n [2.] Mengubah angkar return of investment ke batas minimal aman secara otomatis";
+        cout<<"\n [2.] Mengubah angka return of investment ke batas minimal aman secara otomatis";
         cout<<"\n ------------------------------------------------------------------------------------------------";
         cout<<"\n pilihan anda(1-2): ";cin>>menuROI;
         
@@ -323,7 +324,7 @@ void menulaporan(){
             roi=minimalReturn;
             cout<<"\n ROI di sesuaikan dengan batas minimal aman instrumen pertumbuhan";
         }else{
-            cout<<"\n menggunakan inputan ROI, harap meninjau terkait resiko";
+            cout<<"\n Menggunakan inputan ROI, harap meninjau terkait risiko";
         }
         
     }
@@ -359,9 +360,9 @@ void menulaporan(){
         if(usiaPensiun<= u.Profile.targetAge){
 
             int pensiunAwal = u.Profile.targetAge - usiaPensiun;
-            cout<<"----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
-            statusPensiun = "----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
-            cout<<"\n anda pensiun "<<pensiunAwal<<" tahun lebih cepat";
+            cout<<"\n----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU/ LEBIH CEPAT] @@-----";
+            statusPensiun = "----@@  [SELAMAT ANDA BERHASIL PENSIUN TEPAT WAKTU ATAU LEBIH CEPAT] @@-----";
+            cout<<"\n Anda pensiun "<<pensiunAwal<<" tahun lebih cepat";
             cout<<"\n ------------------------------------------------------------------------------------------------";
             pauseScreen();
         }else{
@@ -375,9 +376,6 @@ void menulaporan(){
             pauseScreen();
         }
     }
-
-
-    
    
     //for decision making
     long long saldoBerjalan = u.totalSavings;
@@ -388,7 +386,6 @@ void menulaporan(){
         tabel[i][1] = u.Profile.currentAge + (i + 1);    // Usia pada tahun itu
         tabel[i][2] = saldoBerjalan;                     // Saldo awal tahun
         tabel[i][3] = yearlySav;                         // Setoran setahun
-        
         
         saldoBerjalan = (saldoBerjalan + yearlySav) * (1.0 + roi);
         tabel[i][4] = saldoBerjalan;                     // Saldo akhir tahun
@@ -443,14 +440,14 @@ void menuTransaksi(){
     do{
         system("cls");
 
-        cout << "\n+==================================================+\n";
+        cout << "\n  +================================================+\n";
         cout << " |   [FIRE] KELOLA, CARI & HAPUS                    |\n";
-        cout << "+==================================================+\n";
+        cout << "  +================================================+\n";
         cout << " |  [1] Tampilkan Semua Transaksi                   |\n";
         cout << " |  [2] Cari Transaksi                              |\n";
         cout << " |  [3] Hapus Transaksi                             |\n";
         cout << " |  [0] Kembali ke Menu Utama                       |\n";
-        cout << "+==================================================+\n";
+        cout << "  +================================================+\n";
         cout << "Pilih Menu (0-3): "; cin >> pilSub;
         
         if(cin.fail()){
@@ -464,7 +461,7 @@ void menuTransaksi(){
         
         switch(pilSub){
             case 1:{
-                cout << "\n================ DAFTAR TRANSAKSI ================\n";
+                cout << "\n================ DAFTAR TRANSAKSI ================\n\n";
                 if(u.jumlahTransaksi == 0){
                     cout << "Belum ada transaksi yang tercatat.\n";
                 }else{
@@ -473,7 +470,7 @@ void menuTransaksi(){
                     cout << "-----------------------------------------------\n";
                     for(int i = 0; i < u.jumlahTransaksi; i++){
                         cout << " " << u.history[i].id << "   | "
-                             << u.history[i].bulan << "/" << u.history[i].tahun << "  | "
+                             << u.history[i].bulan << "/" << u.history[i].tahun << "     | "
                              << formatMoney(u.history[i].nominal) << "  | "
                              << u.history[i].catatan << "\n";
                     } 
@@ -634,15 +631,16 @@ void loadData(){
 
 void halUtama(){
     int pilHalUtama;
+    users& u = user[userAktif];
 
     do{
         system("cls");
-        cout << "\n+==================================================+\n";
+        cout << "\n  +==================================================+\n";
         cout << "  |   [FIRE]  F.I.R.E. MAIN MENU                     |\n";
         cout << "  |   Financial Independence, Retire Early           |\n";
         cout << "  +==================================================+\n";
-        cout << "  |  Halo, " << user[userAktif].username << "!\t\t\t|\n"; // \t tu kaya tab buat ngasih jarak
-        //cout << "  |  Saldo: " << u.Profile.currentSavings << "\t\t\t\t     |\n"; 
+        cout << "     Halo, " << user[userAktif].username << "!\n"; 
+        cout << "     Saldo: " << formatMoney(u.totalSavings) << "\n"; 
         
         cout << "  +==================================================+\n";
         cout << "  |  [1] Kelola Profil & Target Pensiun              |\n";
@@ -687,13 +685,13 @@ int main(){
         //halaman login
         do{
             system("cls");
-                cout<<"\n #=============================#";
+                cout<<"\n  #============================#";
                 cout<<"\n |        F.I.R.E APP           |";
-                cout<<"\n #=============================#";
+                cout<<"\n  #============================#";
                 cout<<"\n | 1. Register                  |";
                 cout<<"\n | 2. Login                     |";
                 cout<<"\n | 3. Exit                      |";
-                cout<<"\n #=============================#";
+                cout<<"\n  #============================#";
                 cout<<"\n Pilih Menu (1-3): ";cin>>menuAwal;
                 
                 if(cin.fail()){
@@ -717,7 +715,7 @@ int main(){
             bool found=false;
             do{
                 found=false;
-                cout<<"\n=========== REGISTER ================";
+                cout<<"\n=========== REGISTER ================\n";
                 cout<<"\n Username: ";cin>>usernameNew;
                 for(int i=0;i<jumlahUser;i++){
 
@@ -732,7 +730,7 @@ int main(){
             // jangan lupa kalau berhasil pindahin dari username new ke database username
             
                 //4. masukin pass
-                cout<<"\n password :";cin>>passwordNew;
+                cout<<" Password :";cin>>passwordNew;
 
                 user[jumlahUser].username = usernameNew;
                 user[jumlahUser].password = passwordNew;
@@ -741,7 +739,7 @@ int main(){
                 jumlahUser++;
                 saveAll();
 
-                cout<<"\n selamat registrasi berhasil";
+                cout<<"\n Selamat Registrasi Berhasil!";
                 cout<<"\n ==================================================";
                 pauseScreen();
             //5. simpan di database pass and uname
@@ -754,10 +752,10 @@ int main(){
             bool login=false;
             do{
                 cout<<"\n=========== LOGIN PAGE ===============";
-                cout<<"\n Kembali ke Menu[0]";
+                cout<<"\n Kembali ke Menu [0]\n";
                 cout<<"\n Username : ";cin>>logUser;
                 if (logUser == "0")break;
-                cout<<"\n Password : ";cin>>logPass;
+                cout<<" Password : ";cin>>logPass;
                 
                 attempt++;
                 //2. if benar masuk applikasi kalau salah balik ke halaman login
@@ -768,7 +766,7 @@ int main(){
                         break;
                     }
                 }
-                if(!login)cout<<"\n [!] Username atau Password salah";
+                if(!login)cout<<"\n [!] Username atau Password salah\n";
                 if(attempt>=3){
                     cout<<"\n Terlalu Banyak Percobaan";
                     pauseScreen();
@@ -787,7 +785,7 @@ int main(){
         }
         case 3:
             //keluar program
-            cout<<"terimakasih telah menggunakan apps kammi ;))";
+            cout<<"\nTerimakasih telah menggunakan apps kami ;))";
             //exit
             isexit = true;
             break;
