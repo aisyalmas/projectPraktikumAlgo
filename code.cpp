@@ -318,7 +318,7 @@ void menulaporan(){
         avgMonthly = totalNominal / u.jumlahTransaksi;
     }
 
-    cout<<"\n ====================== CETAK LAPORAN LENGKAP ===========================\n";
+    cout<<"\n ====================== CETAK LAPORAN ANALISIS ===========================\n";
     if(!u.Profile.isDone){
         cout<<"\n Lengkapi profile terlebih dahulu, bisa di isi di menu [1].";
         pauseScreen();
@@ -377,7 +377,7 @@ void menulaporan(){
         cout<<"\n Inflasi diasumsikan     : "<<u.Profile.inflationRate<<"%";
         cout<<"\n Aturan Penarikan aman   : "<<"4%";
         cout<<"\n Minimal ROI aman /tahun : "<<minimalReturn*100<<"% per tahun";
-        cout<<"\n ROI yang nada masukan "<<roi<<"% per tahun";
+        cout<<"\n ROI yang nada masukan   :"<<roi*100<<"% per tahun";
         cout<<"\n ------------------------------------------------------------------------------------------------";
         cout<<"\n\n [Apabila anda melanjutkan untuk menaruh uang di instrumen yang roi nya di bawah minimal value, \ndana akan berresiko habis di masa tua karena tidak bisa menutup inflasi pertahunnya].";
         cout<<"\n [1.] Tetap melanjutkan dengan return of investment sekarang";
@@ -418,7 +418,7 @@ void menulaporan(){
     
     cout<<"\n\n ------------------------------------------------------------------------------------------------";
     cout<<"\n Target Dana F.I.R.E           : "<<formatMoney(u.Profile.targetAmount);
-    cout<<"\n Investasi Rutin anda          : "<<monthlySav<<" / bulan";
+    cout<<"\n Investasi Rutin anda          : "<<formatMoney(monthlySav)<<" / bulan";
     cout<<"\n Asumsi Return of Investment   : "<<roi*100<<" % per tahun";
     cout<<"\n ------------------------------------------------------------------------------------------------";
     
@@ -458,7 +458,13 @@ void menulaporan(){
    
     //for decision making
     long long saldoBerjalan = u.totalSavings;
-    int lamaSimulasi = (tahunPensiun == -1 || tahunPensiun > maxTahun) ? maxTahun : tahunPensiun;
+    int lamaSimulasi = maxTahun; 
+
+    if (tahunPensiun != -1 && (tahunPensiun + 1) < maxTahun) {
+        lamaSimulasi = tahunPensiun + 1;
+    } else if (tahunPensiun != -1) {
+        lamaSimulasi = maxTahun; 
+    }
     
     for (int i = 0; i < lamaSimulasi; i++) {
         tabel[i][0] = i + 1;                             // Tahun ke-
@@ -766,7 +772,7 @@ void halUtama(){
             default:
                 cout << "\nPilihan tidak valid. Silakan pilih antara 0-4.\n";
         } 
-    }while(pilHalUtama != 0);
+    }while(pilHalUtama != 5);
 }
 
 int main(){
@@ -878,6 +884,7 @@ int main(){
         }
         case 3:
             //keluar program
+            system("cls");
             cout<<"terimakasih telah menggunakan apps kammi ;))";
             //exit
             isexit = true;
