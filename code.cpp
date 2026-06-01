@@ -140,7 +140,7 @@ void menuProfile(){
 
     //ngisi profile kalau belum
     
-	cout<<"\n------------------------------------------------------";
+    cout<<"\n------------------------------------------------------";
     cout<<"\n Masukan data Profile Anda \n";
     
     while(true){
@@ -483,7 +483,7 @@ void menulaporan(){
     
     if (fileLaporan.is_open()) {
         fileLaporan << "=================================================================================\n";
-        fileLaporan << "                      LAPORAN PERENCANAAN DANA F.I.R.E                           \n";
+        fileLaporan << "                       LAPORAN PERENCANAAN DANA F.I.R.E                                          \n";
         fileLaporan << "=================================================================================\n";
         fileLaporan << " Username Pengguna      : " << u.username << "\n";
         fileLaporan << " Usia Saat Ini          : " << u.Profile.currentAge << " tahun\n";
@@ -520,6 +520,32 @@ void menulaporan(){
     
 }
 
+int partition(Transaction arr[], int low, int high) {
+    int pivot = arr[high].id; 
+    int i = (low - 1);
+
+    for(int j = low; j <= high - 1; j++){
+        if(arr[j].id < pivot){ 
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+void quickSort(Transaction arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+
+        // Urutkan elemen sebelum dan sesudah partisi
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+
+
 void menuTransaksi(){
     users& u = user[userAktif];
     int pilSub;
@@ -548,7 +574,7 @@ void menuTransaksi(){
         
         switch(pilSub){
             case 1:{
-				system("cls");
+                system("cls");
                 cout << "\n================ DAFTAR TRANSAKSI ================\n";
                 if(u.jumlahTransaksi == 0){
                     cout << "Belum ada transaksi yang tercatat.\n";
@@ -589,22 +615,36 @@ void menuTransaksi(){
                     break;
                 }
                 cin.ignore();
+
+                quickSort(u.history, 0, u.jumlahTransaksi - 1);
                 
-                bool ditemukan = false;
-                for(int i = 0; i < u.jumlahTransaksi; i++){
-                    if(u.history[i].id == idCari){
-                        cout << "\n---------------- HASIL PENCARIAN ----------------\n";
-                        cout << " ID  | Bulan/Tahun | Nominal (Rp) | Catatan\n";
-                        cout << "-----------------------------------------------\n";
-                        cout << " " << u.history[i].id << "   | "
-                             << u.history[i].bulan << "/" << u.history[i].tahun << "  | "
-                             << formatMoney(u.history[i].nominal) << "  | "
-                             << u.history[i].catatan << "\n";
-                        ditemukan = true;
+                int low = 0;
+                int high = u.jumlahTransaksi -1;
+                int indexDitemukan = -1; 
+
+                while(low <= high){
+                    int mid = low + (high - low) / 2;
+
+                    if(u.history[mid].id == idCari){
+                        indexDitemukan = mid;
                         break;
+                    }else if (u.history[mid].id < idCari) {
+                        low = mid + 1; 
+                    }
+                    else {
+                        high = mid - 1; 
                     }
                 }
-                if(!ditemukan){
+
+                if(indexDitemukan != -1){
+                    cout << "\n---------------- HASIL PENCARIAN ----------------\n";
+                    cout << " ID  | Bulan/Tahun | Nominal (Rp) | Catatan\n";
+                    cout << "-----------------------------------------------\n";
+                    cout << " " << u.history[indexDitemukan].id << "   | "
+                    << u.history[indexDitemukan].bulan << "/" << u.history[indexDitemukan].tahun << "  | "
+                    << formatMoney(u.history[indexDitemukan].nominal) << "  | "
+                         << u.history[indexDitemukan].catatan << "\n";
+                } else {
                     cout << "\n [!] Transaksi dengan ID " << idCari << " tidak ditemukan.\n";
                 }
                 cout << "------------------------------------------------\n";
@@ -619,6 +659,7 @@ void menuTransaksi(){
                     break;
                 }
 
+                quickSort(u.history, 0, u.jumlahTransaksi - 1);
                 cout << "\n  ID  | Bulan/Tahun | Nominal (Rp) | Catatan\n";
                 cout << "-----------------------------------------------\n";
                 for(int i = 0; i < u.jumlahTransaksi; i++){
@@ -903,4 +944,3 @@ int main(){
     }while (isexit == false);
 
 }
-
